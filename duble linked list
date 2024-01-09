@@ -1,0 +1,454 @@
+traversing of double
+ALGORITHM:-
+1. IF HEAD == NULL. WRITE “UNDERFLOW” GOTO STEP 6.
+ [END OF IF]
+2. Set PTR = HEAD.
+3. Repeat step 4 and 5 while PTR != NULL.
+4. Write PTR → data.
+5. PTR = PTR → next.
+6.Exit.
+
+CODE:-
+#include <stdio.h>
+#include <stdlib.h>
+struct node {
+    int data;
+    struct node * prev;
+    struct node * next;
+}*head, *last;
+void createList(int n);
+void displayListFromFirst();
+void displayListFromEnd();
+int main()
+{
+    int n, choice;
+
+    head = NULL;
+    last = NULL;
+    
+    printf("Enter the number of nodes you want to create: ");
+    scanf("%d", &n);
+
+    createList(n); // Create list of n nodes
+
+    printf("\nPress 1 to display list from First");
+    printf("\nPress 2 to display list from End : ");
+    scanf("%d", &choice);
+
+    if(choice==1)
+    {
+        displayListFromFirst();
+    }
+    else if(choice == 2)
+    {
+        displayListFromEnd();
+    }
+
+    return 0;
+}
+void createList(int n)
+{
+    int i, data;
+    struct node *newNode;
+
+    if(n >= 1)
+    {
+        head = (struct node *)malloc(sizeof(struct node));
+
+        if(head != NULL)
+        {
+            printf("Enter data of 1 node: ");
+            scanf("%d", &data);
+
+            head->data = data;
+            head->prev = NULL;
+            head->next = NULL;
+
+            last = head;
+            for(i=2; i<=n; i++)
+            {
+                newNode = (struct node *)malloc(sizeof(struct node));
+
+                if(newNode != NULL)
+                {
+                    printf("Enter data of %d node: ", i);
+                    scanf("%d", &data);
+
+                    newNode->data = data;
+                    newNode->prev = last; 
+                    newNode->next = NULL;
+
+                    last->next = newNode; 
+                    last = newNode;          
+                }
+                else
+                {
+                    printf("Unable to allocate memory.");
+                    break;
+                }
+            }
+
+            printf("\nDOUBLY LINKED LIST CREATED SUCCESSFULLY\n");
+        }
+        else
+        {
+            printf("Unable to allocate memory");
+        }
+    }
+}
+void displayListFromFirst()
+{
+    struct node * temp;
+    int n = 1;
+
+    if(head == NULL)
+    {
+        printf("List is empty.");
+    }
+    else
+    {
+        temp = head;
+        printf("\n\nDATA IN THE LIST:\n");
+
+        while(temp != NULL)
+        {
+            printf("DATA of %d node = %d\n", n, temp->data);
+
+            n++;
+            temp = temp->next;
+        }
+    }
+}
+void displayListFromEnd()
+{
+    struct node * temp;
+    int n = 0;
+
+    if(last == NULL)
+    {
+        printf("List is empty.");
+    }
+    else
+    {
+        temp = last;
+        printf("\n\nDATA IN THE LIST:\n");
+
+        while(temp != NULL)
+        {
+            printf("DATA of last-%d node = %d\n", n, temp->data);
+
+            n++;
+            
+            /* Move the current pointer to previous node */
+            temp = temp->prev; 
+        }
+    }
+}
+
+insertion:-
+ALGORITHM:-
+( Insertion at Beginning)
+1: IF ptr = NULL
+Write Overflow and Goto step 9
+[End of if]
+2: SET NEW_NODE = ptr
+3: SET ptr = ptr -> NEXT
+4: SET NEW_NODE -> DATA = VAL
+5: SET NEW_NODE -> PREV = NULL
+6: SET NEW_NODE -> NEXT = START
+7: SET head -> PREV = NEW_NODE
+8: SET head = NEW_NODE
+9: EXIT	
+( Insertion at Ending)
+1:Create a new node
+2:Assign its data value
+3:Assign its next node to NULL as this will be the last(tail) node
+4:Check if the list is empty
+5:Change the head node to this node
+6:If it is empty then just assign the previous node as NULL and return
+7:If not then traverse till the last node
+8:Assign the last node’s next pointer to this new node
+9:Assing this new node’s previous to the last node in the list
+10:Now, the new node has become the last node.
+( Insertion at Nth Positon)
+1: Calculate the size of the node
+2: If the position you want to enter is less than 1
+Invalid position But, if 0 then use insertAtStart method
+3: If the position you want to enter is greater than size then
+Invalid position, but if the position is equal to size then use insertLast method 
+4: else create a temp node and assign it the address of the head
+5: Create a new node and assign it the data value
+6: Iterate to the position you want to enter after in the linked list
+7: Assign this new node’s next and previous nodes
+8: Assign previous node’s next to this new node
+9: Assign next node’s previous to this new node
+
+CODE:-
+#include <stdio.h>
+#include <stdlib.h>
+struct node
+{
+    struct node *prev;
+    int data;
+    struct node *next;
+};
+void double_ll_treverse(struct node *ptr)
+{
+    int i = 1;
+    while (ptr != NULL)
+    {
+        printf("Element at %d th position = %d \n", i, ptr->data);
+        i++;
+        ptr = ptr->next;
+    }
+}
+void insertAtFirst(struct node *ptr, int data)
+{
+    struct node *inser = (struct node *)malloc(sizeof(struct node));
+    inser->data = data;
+    inser->prev = NULL;
+    inser->next = ptr;
+    ptr = inser;
+    printf("Linked list after Insertion \n");
+    double_ll_treverse(ptr);
+}
+void insertAtPos(struct node *ptr, int data, int pos)
+{
+    struct node *inser = (struct node *)malloc(sizeof(struct node));
+    struct node *ptr1 = ptr;
+    inser->data = data;
+    int i = 1;
+    while (i < pos - 1)
+    {
+        ptr = ptr->next;
+        i++;
+    }
+    inser->prev = ptr;
+
+    inser->next = ptr->next;
+    ptr->next = inser;
+    printf("List after Insertion \n");
+    double_ll_treverse(ptr1);
+}
+void insertAtEnd(struct node *ptr, int data)
+{
+    struct node *ptr1 = ptr;
+    struct node *inser = (struct node *)malloc(sizeof(struct node));
+    inser->data = data;
+    printf("Hello");
+    while (ptr->next != NULL)
+    {
+        ptr = ptr->next;
+    }
+    inser->prev = ptr;
+    ptr->next = inser;
+    inser->next = NULL;
+    printf("Linked list after insertion \n");
+    double_ll_treverse(ptr1);
+}
+int main()
+{
+    struct node *first;
+    struct node *second;
+    struct node *third;
+    struct node *fourth;
+    first = (struct node *)malloc(sizeof(struct node));
+    second = (struct node *)malloc(sizeof(struct node));
+    third = (struct node *)malloc(sizeof(struct node));
+    fourth = (struct node *)malloc(sizeof(struct node));
+    first->prev = NULL;
+    first->data = 11;
+    first->next = second;
+    second->prev = first;
+    second->data = 27;
+    second->next = third;
+    third->prev = second;
+    third->data = 45;
+    third->next = fourth;
+    fourth->prev = third;
+    fourth->data = 108;
+    fourth->next = NULL;
+    struct node *ptr = first;
+    printf("Linked list before Insertion = \n");
+    double_ll_treverse(ptr);
+    int val;
+    int choice;
+    printf("Enter 1 to Insert at begining \n Enter 2 to Insert at particular index \n Enter 3 to Insert at last \n");
+    scanf("%d", &choice);
+    printf("Enter Data to Insert \n");
+    scanf("%d", &val);
+    if (choice == 1)
+    {
+        insertAtFirst(ptr, val);
+    }
+    else if (choice == 2)
+    {
+        int pos;
+        printf("Enter a position to Insert \n");
+        scanf("%d", &pos);
+        insertAtPos(ptr, val, pos);
+    }
+    else if (choice == 3)
+    {
+        insertAtEnd(ptr, val);
+    }
+    else
+    {
+        printf("Invalid Input");
+    }
+    return 0;
+}
+
+deletion:-
+ALGORITHM:-
+(Deletion from Beginning)
+1: IF HEAD = NULL
+Write underflow & go to step 6
+2: SET PTR = HEAD
+3: SET HEAD = HEAD → NEXT
+4: SET HEAD → PREV = NULL
+5: FREE PTR
+6: EXIT
+(Deletion from Middle)
+1: Traverse till the target node
+2: create a node called the previous storing previous node of the target node
+3: Assign previous node’s next pointer to the next node of the target node
+4: For the next node of the target node, its previous pointer is assigned to the targets node’s previous node’s address
+5: Free memory of target node
+(Deletion from Ending)
+1: Traverse till the target node.
+2: Check if this is the last node i.e. if node->next = NULL, then its last node.
+3: Assign last node’s previous node’s next pointer to the last node’s next node’s address, which basically is NULL in this case.
+4: Free the memory.
+
+CODE:-
+#include<stdio.h>
+#include<stdlib.h>
+Struct Node
+{
+  Int data;
+  Struct Node *next;
+  Struct Node *prev;
+};
+Int getLength (struct Node *node);
+Void insert (struct Node **head, int data)
+{
+  Struct Node *freshNode = (struct Node *) malloc (sizeof (struct Node));
+  freshNode->data = data;
+  freshNode->next = *head;
+  freshNode->prev = NULL;
+  if (*head != NULL)
+    (*head)->prev = freshNode;
+  *head = freshNode;
+}
+Void deleteFront (struct Node **head){
+  Struct Node *tempNode = *head;
+  If (*head == NULL) {
+      Printf (“Linked List Empty, nothing to delete\n”);
+      Return;
+    }	
+  If (tempNode->next == NULL)
+    {
+      Printf (“%d deleted\n”, tempNode->data);
+      *head = NULL;
+      Return;
+    }
+  *head = (*head)->next;
+  (*head)->prev = NULL;
+  Printf (“%d deleted\n”, tempNode->data);
+  Free (tempNode); 
+  }
+  Void deleteEnd (struct Node **head)
+  {
+  Struct Node *tempNode = *head;
+  If (*head == NULL)
+    {
+   Printf (“Linked List Empty, nothing to delete\n”);
+   Return;
+    }
+  If (tempNode->next == NULL)
+    {
+   Printf (“%d deleted\n”, tempNode->data);
+   *head = NULL;
+    Return;
+    }
+  While (tempNode->next != NULL)
+  tempNode = tempNode->next;
+  struct Node *secondLast = tempNode->prev;
+  secondLast->next = NULL;
+  printf (“%d deleted\n”, tempNode->data);
+  free (tempNode);
+  }
+ Void deleteNthNode (struct Node **head, int n)  {
+  Int len = getLength (*head);
+  If (n < 1 || n > len)  {
+   Printf (“Enter valid position\n”);
+   Return;
+    }
+  If (n == 1)
+    {
+      deleteFront (head);
+      return; }
+  If (n == len) {
+      deleteEnd (head);
+      return;
+    }
+  Struct Node *tempNode = *head;
+  While (--n) {
+      tempNode = tempNode->next;
+    }
+  Struct Node *previousNode = tempNode->prev;
+  Struct Node *nextNode = tempNode->next;
+  previousNode->next = tempNode->next;
+  nextNode->prev = tempNode->prev;
+  printf (“%d deleted \n”, tempNode->data);
+  free (tempNode);
+}
+Int getLength (struct Node *node)
+{
+  Int len = 0;
+  While (node != NULL)
+    {
+     Node = node->next;
+     Len++;
+    }
+  Return len;
+  }
+ Void display (struct Node *node)
+  {
+  Struct Node *end = NULL;
+  While (node != NULL)
+    {
+   Printf (“ %d “, node->data);
+   End = node;
+   Node = node->next;
+    }
+  While (end != NULL)
+    {
+    Printf (“ %d “, end->data);
+    End = end->prev;
+    }
+   Printf (“\n\n”);
+  }
+ Int main ()
+  {
+  Struct Node *head = NULL;
+  Insert (&head, 7);
+  Insert (&head, 8);
+  Insert (&head, 9);
+  Insert (&head, 10);
+  Insert (&head, 11);
+  Insert (&head, 12);
+  Display (head);
+  deleteFront (&head);
+  display (head);
+  deleteEnd (&head);
+  display (head);
+  deleteNthNode (&head, 3);
+  display (head);
+  deleteNthNode (&head, 1);
+  display (head);
+  deleteEnd (&head);
+  display (head);
+  return 0;
+}
